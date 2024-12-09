@@ -1,0 +1,89 @@
+@if( users && users.length > 0 && updatedUser == null){ 
+     <h2 class="text-center text-3xl p-4 font-bold relative">User Details</h2>
+   <div class="grid grid-cols-3 p-4">
+      @for(user of users;track user.id){
+    
+      <div class="border shadow-lg m-3 p-8">
+        <p><strong>Name:</strong> {{ user.name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Date of Birth:</strong> {{ user.dob }}</p>
+        @if(user.imageUrl){
+        <p ><strong>Image:</strong> <img width="200px" [src]="user.imageUrl" alt="User Image" /></p>
+        } @else{
+          <p ><strong>Image:</strong> <img width="200px" src="/no-image-available.webp" alt="User Image" /></p> 
+        }
+       <div class="flex gap-3">
+        <button (click)="edituserdetails(user.id)" class="px-3 py-1 border shadow-sm m-2 rounded-md bg-slate-400 text-white hover:shadow-lg hover:bg-slate-500">Edit</button>
+        <button 
+      class="px-3 py-1 border shadow-sm m-2 rounded-md bg-red-400 text-white hover:shadow-lg hover:bg-red-500"
+      (click)="DeleteUser(user.id)"
+    >
+      Delete user
+    </button>
+  </div>
+      </div>
+      
+    }</div>
+   }
+  @else if(updatedUser == null){
+      <p>No user data available.</p>
+  }
+  
+@if(updatedUser!=null){
+  <div class="w-[80%] sm:w-[50%] mx-auto bg-white shadow-lg p-6 rounded-lg flex flex-col gap-6" [formGroup]="updatedUserForm">
+    <h2 class="text-2xl font-bold text-center text-gray-700">Edit User Details</h2>
+   <div class="flex flex-col">
+      <label for="email" class="font-medium text-gray-600">Email:   {{updatedUser.email}}</label>
+      
+    </div>
+ 
+    <div class="flex flex-col">
+      <label for="name" class="font-medium text-gray-600">Name:  {{updatedUser.name}}</label>
+      <input 
+        id="name" 
+        type="text" 
+        class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+        formControlName="name"
+        placeholder="Enter new name" 
+      />
+    </div>
+    <div class="flex flex-col">
+      <label for="dob" class="font-medium text-gray-600">Date of Birth: {{updatedUser.dob}}</label>
+      <input 
+        id="dob" 
+        type="date" 
+        class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+        formControlName="dob"
+      />
+    </div>
+  
+    <div class="flex flex-col">
+      <label for="imageUrl" class="font-medium text-gray-600">Image URL: </label>
+      <input 
+        id="imageUrl" 
+        type="text" 
+        class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+        formControlName="imageUrl"
+        placeholder="Enter new image URL" 
+      />
+    </div>
+
+    <div class="flex flex-col items-center">
+      <p class="font-medium text-gray-600">Current Image:</p>
+      <img 
+        class="rounded shadow-md" 
+        width="200" 
+        [src]="updatedUser.imageUrl" 
+        alt="User Image" 
+      />
+    </div>
+    <button 
+      class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors"
+      (click)="updateUser(updatedUser.id)"
+    >
+      Update Details
+    </button>
+    
+  </div>
+  
+}

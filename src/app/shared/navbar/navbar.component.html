@@ -1,0 +1,15 @@
+
+<nav class="px-4 py-2 flex align-middle justify-between bg-slate-400 text-white h-20">
+
+    <div class="font-bold text-2xl flex  items-center">logo</div>
+    <div class="flex align-middle items-center justify-around w-[30rem]">
+        <a href="">Home</a>
+        <a href="counter">Counter</a>
+        <a href="todo">Todo</a>
+        
+        @if(!loggedIn){<a href="login">Login</a><a href="register">Register</a>}
+        @else{
+            <button (click)="logout()">Logout</button>
+        }
+    </div>
+</nav>

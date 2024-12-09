@@ -1,0 +1,77 @@
+<div class="w-[80%] sm:w-[50%] mx-auto bg-white shadow-lg p-6 rounded-lg flex flex-col gap-6" [formGroup]="RegisterForm">
+    <h2 class="text-2xl font-bold text-center text-gray-700">Register</h2>
+  
+  
+   <div class="flex flex-col">
+      <label for="email" class="font-medium text-gray-600">Email:  </label>
+      <input 
+      required
+      id="email" 
+      type="email" 
+      class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+      formControlName="email"
+      placeholder="Enter email" 
+    />
+    </div>
+    <div class="flex flex-col">
+        <label for="email" class="font-medium text-gray-600">Password:  </label>
+        <input 
+        required
+        id="password" 
+        type="password" 
+        class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+        formControlName="password"
+        placeholder="Enter email" 
+      />
+      </div>
+ 
+    <div class="flex flex-col">
+      <label for="name" class="font-medium text-gray-600">Name:</label>
+      <input 
+      required
+        id="name" 
+        type="text" 
+        class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+        formControlName="name"
+        placeholder="Enter name" 
+      />
+    </div>
+    <div class="flex flex-col">
+      <label for="dob" class="font-medium text-gray-600">Date of Birth:</label>
+      <input 
+      required
+        id="dob" 
+        type="date" 
+        class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+        formControlName="dob"
+      />
+    </div>
+  
+    <div class="flex flex-col">
+      <label for="imageUrl" class="font-medium text-gray-600">Image URL: </label>
+      <input 
+
+        id="imageUrl" 
+        type="text" 
+        class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+        formControlName="imageUrl"
+        placeholder="Enter new image URL" 
+      />
+    </div>
+
+    <!-- <div class="flex flex-col items-center">
+      <p class="font-medium text-gray-600">Current Image:</p>
+      <img 
+        class="rounded shadow-md" 
+        width="200" 
+        [src]="imageUrl" 
+        alt="User Image" 
+      />
+    </div> -->
+    <button 
+      class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors"
+      (click)="register()"
+    >
+      Register
+    </button>
+  </div>
