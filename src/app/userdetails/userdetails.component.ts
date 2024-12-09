@@ -55,7 +55,6 @@ export class UserDetailComponent implements OnInit {
       dob: this.updatedUserForm.value.dob ?? new Date(),
       imageUrl: this.updatedUserForm.value.imageUrl ?? '', 
     };
-    console.log(user);
  
     this.http.put(`https://localhost:44342/api/user/${id}`,user).subscribe({
       next:(res)=>{

@@ -31,6 +31,7 @@ export class RegisterComponent {
 
         },
         error:(err)=>{
+          alert("user registration failed!!! retry");
           console.log(err);
         }
       }  

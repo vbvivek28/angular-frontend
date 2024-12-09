@@ -32,14 +32,14 @@ export class LoginComponent implements OnInit {
   public login(): void {
     this.http.post<AuthResponse>('https://localhost:44342/login', this.user).subscribe({
       next: (response) => {
-        console.log('Login successful:', response);
+        alert('Login successful');
         this.user.email='';
         this.user.password='';
         this.authService.login(response.token);
         this.router.navigate(['/user-detail']);
       },
       error: (error) => {
-        console.error('Login failed:', error);
+        alert('Login failed '+error.error);
       }
     });
   }
