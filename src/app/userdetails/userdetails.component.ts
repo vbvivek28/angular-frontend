@@ -2,20 +2,16 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AngularToastifyModule, ToastService } from 'angular-toastify';
+import { User , Department} from '../types';
 
 
-export interface User {
-  id: number ;
-  name: string ;
-  email: string;
-  dob: Date; 
-  imageUrl?: string;
-}
+
 @Component({
   selector: 'app-userdetails',
   templateUrl: './userdetails.component.html',
   styleUrl: './userdetails.component.css',
-  imports: [HttpClientModule,ReactiveFormsModule],
+  imports: [HttpClientModule,ReactiveFormsModule,AngularToastifyModule],
 })
 
 
@@ -23,8 +19,8 @@ export interface User {
 
 export class UserDetailComponent implements OnInit {
   users!: User[] ;
-  updatedUser!: User;
-
+  updatedUser!: User | null;
+  departmentOptions: Department[]=[];
   
   updatedUserForm = new FormGroup({
     id: new FormControl<number | null>(null), 
@@ -32,33 +28,53 @@ export class UserDetailComponent implements OnInit {
     email: new FormControl<string | null>(null),
     dob: new FormControl<Date | null>(null),
     imageUrl: new FormControl<string | null>(null),
+    gender: new FormControl<string | null>(null),
+    phoneNumber: new FormControl<string | null>(null),
+    address: new FormControl<string | null>(null),
+    termsAccepted:new FormControl<boolean | null>(null),
+    departmentId: new FormControl<number | null>(null),
   });
-  constructor(private http: HttpClient, private router: Router) {}
+  
+  constructor(private http: HttpClient, private router: Router,private _toastService: ToastService) {}
 
+ 
 
+   getDepartmentName(id :number) {
+    const department = this.departmentOptions.find(dept => dept.id === id);
+    return department ? department.departmentName : "Department not found";
+}
 
   edituserdetails(id:number){
     const user= this.users.find(u => u.id === id);
     if (user) {
       this.updatedUser = user;
+      console.log(this.updatedUser)
       this.updatedUserForm.patchValue(user);
     } else {
-      console.warn(`User with ID ${id} not found`);
+      this._toastService.warn(`User with ID ${id} not found`);
     } 
   }
 
   updateUser(id:number){
     const user: User = {
-      id: this.updatedUserForm.value.id ?? 0, 
+      id: this.updatedUserForm.value.id ?? 0,
       name: this.updatedUserForm.value.name ?? '',
       email: this.updatedUserForm.value.email ?? '',
       dob: this.updatedUserForm.value.dob ?? new Date(),
-      imageUrl: this.updatedUserForm.value.imageUrl ?? '', 
+      imageUrl: this.updatedUserForm.value.imageUrl ?? '',
+      gender: this.updatedUserForm.value.gender ?? '',
+      address: this.updatedUserForm.value.address ?? '',
+      phoneNumber: this.updatedUserForm.value.phoneNumber ?? '',
+      termsAccepted: this.updatedUserForm.value.termsAccepted?? false,
+      departmentId: this.updatedUserForm.value.departmentId ?? 0,
     };
- 
+ console.log(user);
     this.http.put(`https://localhost:44342/api/user/${id}`,user).subscribe({
       next:(res)=>{
         console.log(res);
+        this._toastService.success("user updated successfully");
+        this.updatedUser=null;
+        this.getUsers();
       },
       error:(err)=>{
         console.log(err);
@@ -71,7 +87,7 @@ export class UserDetailComponent implements OnInit {
     this.http.delete(`https://localhost:44342/api/user/${id}`).subscribe({
       next:(res)=>{
         console.log(res);
-        console.log("deleted successfully");
+        this._toastService.success("user deleted successfully");
         this.getUsers();
       },
       error:(err)=>{
@@ -82,6 +98,16 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
+    this.http.get("https://localhost:44342/dept").subscribe({next:(res)=>{
+
+      this.departmentOptions = res as Department[];
+      console.log(this.departmentOptions);
+          },
+          error:(err)=>{
+          console.log(err);
+          }
+        })
+  
   }
 
   getUsers(): void {
@@ -89,13 +115,14 @@ export class UserDetailComponent implements OnInit {
     this.http.get<User[]>(`https://localhost:44342/api/user`,{headers:{
       Authorization: "Bearer " + token
     }
-
     }).subscribe({
       next: (data) => {
+        
         this.users = data;
+        console.log(this.users);
       },
       error: (error) => {
-        console.error('Failed to fetch user details', error);
+        this._toastService.error('Failed to fetch user details');
       }
     });
   }

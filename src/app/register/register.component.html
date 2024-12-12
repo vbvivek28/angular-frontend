@@ -1,10 +1,10 @@
 <div class="w-[80%] sm:w-[50%] mx-auto bg-white shadow-lg p-6 rounded-lg flex flex-col gap-6" [formGroup]="RegisterForm">
-    <h2 class="text-2xl font-bold text-center text-gray-700">Register</h2>
-  
-  
-   <div class="flex flex-col">
-      <label for="email" class="font-medium text-gray-600">Email:  </label>
-      <input 
+  <h2 class="text-2xl font-bold text-center text-gray-700">Register</h2>
+
+  <!-- Email Input -->
+  <div class="flex flex-col">
+    <label for="email" class="font-medium text-gray-600">Email:  </label>
+    <input 
       required
       id="email" 
       type="email" 
@@ -12,66 +12,114 @@
       formControlName="email"
       placeholder="Enter email" 
     />
-    </div>
-    <div class="flex flex-col">
-        <label for="email" class="font-medium text-gray-600">Password:  </label>
-        <input 
-        required
-        id="password" 
-        type="password" 
-        class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-        formControlName="password"
-        placeholder="Enter email" 
-      />
-      </div>
- 
-    <div class="flex flex-col">
-      <label for="name" class="font-medium text-gray-600">Name:</label>
-      <input 
-      required
-        id="name" 
-        type="text" 
-        class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-        formControlName="name"
-        placeholder="Enter name" 
-      />
-    </div>
-    <div class="flex flex-col">
-      <label for="dob" class="font-medium text-gray-600">Date of Birth:</label>
-      <input 
-      required
-        id="dob" 
-        type="date" 
-        class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-        formControlName="dob"
-      />
-    </div>
-  
-    <div class="flex flex-col">
-      <label for="imageUrl" class="font-medium text-gray-600">Image URL: </label>
-      <input 
-
-        id="imageUrl" 
-        type="text" 
-        class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-        formControlName="imageUrl"
-        placeholder="Enter new image URL" 
-      />
-    </div>
-
-    <!-- <div class="flex flex-col items-center">
-      <p class="font-medium text-gray-600">Current Image:</p>
-      <img 
-        class="rounded shadow-md" 
-        width="200" 
-        [src]="imageUrl" 
-        alt="User Image" 
-      />
-    </div> -->
-    <button 
-      class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors"
-      (click)="register()"
-    >
-      Register
-    </button>
   </div>
+
+  <!-- Password Input -->
+  <div class="flex flex-col">
+    <label for="password" class="font-medium text-gray-600">Password:  </label>
+    <input 
+      required
+      id="password" 
+      type="password" 
+      class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+      formControlName="password"
+      placeholder="Enter password" 
+    />
+  </div>
+
+  <!-- Name Input -->
+  <div class="flex flex-col">
+    <label for="name" class="font-medium text-gray-600">Name:</label>
+    <input 
+      required
+      id="name" 
+      type="text" 
+      class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+      formControlName="name"
+      placeholder="Enter name" 
+    />
+  </div>
+
+  <!-- Date of Birth Input -->
+  <div class="flex flex-col">
+    <label for="dob" class="font-medium text-gray-600">Date of Birth:</label>
+    <input 
+      required
+      id="dob" 
+      type="date" 
+      class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+      formControlName="dob"
+    />
+  </div>
+
+  <!-- Image URL Input -->
+  <div class="flex flex-col">
+    <label for="imageUrl" class="font-medium text-gray-600">Image URL: </label>
+    <input 
+      id="imageUrl" 
+      type="text" 
+      class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+      formControlName="imageUrl"
+      placeholder="Enter new image URL" 
+    />
+  </div>
+
+  <!-- Gender Radio Buttons -->
+  <div class="flex flex-col">
+    <label class="font-medium text-gray-600">Gender:</label>
+    <div class="flex gap-4">
+      <label class="flex items-center">
+        <input 
+          type="radio" 
+          formControlName="gender" 
+          value="male" 
+          class="mr-2" /> 
+        Male
+      </label>
+      <label class="flex items-center">
+        <input 
+          type="radio" 
+          formControlName="gender" 
+          value="female" 
+          class="mr-2" /> 
+        Female
+      </label>
+      <label class="flex items-center">
+        <input 
+          type="radio" 
+          formControlName="gender" 
+          value="other" 
+          class="mr-2" /> 
+        Other
+      </label>
+    </div>
+  </div>
+  <label class="font-medium text-gray-600">department:</label>
+  <select class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" formControlName="departmentId">
+  @for(department of departmentOptions; track department.id){
+      <option class="text-black" [value]="department.id">
+      {{ department.departmentName }}
+    </option>}
+  </select>
+
+  <!-- Terms Accepted Checkbox -->
+  <div class="flex flex-col">
+    <label class="flex items-center text-gray-600">
+      <input 
+        type="checkbox" 
+        formControlName="termsAccepted" 
+        class="mr-2" />
+      I accept the terms and conditions
+    </label>
+  </div>
+
+  <!-- Submit Button -->
+  <button 
+    class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors"
+    (click)="register()"
+  >
+    Register
+  </button>
+</div>
+
+<lib-toastify-toast-container position='bottom-right' autoCloseSuccess="2000"/>

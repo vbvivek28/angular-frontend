@@ -7,6 +7,10 @@
         <p><strong>Name:</strong> {{ user.name }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
         <p><strong>Date of Birth:</strong> {{ user.dob }}</p>
+        <p><strong>Gender:</strong> {{ user.gender }}</p>
+        <p><strong>Phone Number:</strong> {{ user.phoneNumber }}</p>
+        <p><strong>Address:</strong> {{ user.address }}</p>
+        <p><strong>Department Name:</strong>  {{ getDepartmentName(user.departmentId) }}</p>
         @if(user.imageUrl){
         <p ><strong>Image:</strong> <img width="200px" [src]="user.imageUrl" alt="User Image" /></p>
         } @else{
@@ -32,13 +36,15 @@
 @if(updatedUser!=null){
   <div class="w-[80%] sm:w-[50%] mx-auto bg-white shadow-lg p-6 rounded-lg flex flex-col gap-6" [formGroup]="updatedUserForm">
     <h2 class="text-2xl font-bold text-center text-gray-700">Edit User Details</h2>
-   <div class="flex flex-col">
-      <label for="email" class="font-medium text-gray-600">Email:   {{updatedUser.email}}</label>
-      
-    </div>
- 
+    
+    <!-- Email Field -->
     <div class="flex flex-col">
-      <label for="name" class="font-medium text-gray-600">Name:  {{updatedUser.name}}</label>
+      <label for="email" class="font-medium text-gray-600">Email: {{updatedUser.email}}</label>
+    </div>
+  
+    <!-- Name Field -->
+    <div class="flex flex-col">
+      <label for="name" class="font-medium text-gray-600">Name: {{updatedUser.name}}</label>
       <input 
         id="name" 
         type="text" 
@@ -47,6 +53,8 @@
         placeholder="Enter new name" 
       />
     </div>
+  
+    <!-- Date of Birth Field -->
     <div class="flex flex-col">
       <label for="dob" class="font-medium text-gray-600">Date of Birth: {{updatedUser.dob}}</label>
       <input 
@@ -57,6 +65,7 @@
       />
     </div>
   
+    <!-- Image URL Field -->
     <div class="flex flex-col">
       <label for="imageUrl" class="font-medium text-gray-600">Image URL: </label>
       <input 
@@ -67,7 +76,8 @@
         placeholder="Enter new image URL" 
       />
     </div>
-
+  
+    <!-- Current Image Display -->
     <div class="flex flex-col items-center">
       <p class="font-medium text-gray-600">Current Image:</p>
       <img 
@@ -77,13 +87,77 @@
         alt="User Image" 
       />
     </div>
+  
+    <!-- Gender Field (Radio Button) -->
+    <div class="flex flex-col">
+      <label for="gender" class="font-medium text-gray-600">Gender: </label>
+      <div class="flex items-center gap-4">
+        <label class="flex items-center">
+          <input type="radio" formControlName="gender" value="Male" />
+          <span class="ml-2">Male</span>
+        </label>
+        <label class="flex items-center">
+          <input type="radio" formControlName="gender" value="Female" />
+          <span class="ml-2">Female</span>
+        </label>
+        <label class="flex items-center">
+          <input type="radio" formControlName="gender" value="Other" />
+          <span class="ml-2">Other</span>
+        </label>
+      </div>
+    </div>
+  
+    <!-- Address Field -->
+    <div class="flex flex-col">
+      <label for="address" class="font-medium text-gray-600">Address: </label>
+      <input 
+        id="address" 
+        type="text" 
+        class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+        formControlName="address"
+        placeholder="Enter address" 
+      />
+    </div>
+  
+    <!-- Phone Number Field -->
+    <div class="flex flex-col">
+      <label for="phoneNumber" class="font-medium text-gray-600">Phone Number: </label>
+      <input 
+        id="phoneNumber" 
+        type="tel" 
+        class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+        formControlName="phoneNumber"
+        placeholder="Enter phone number" 
+      />
+    </div>
+
+    <label class="font-medium text-gray-600">department:{{ getDepartmentName(updatedUser.departmentId) }}</label>
+    <select class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" formControlName="departmentId">
+      
+    @for(department of departmentOptions; track department.id){
+        <option class="text-black" [value]="department.id">
+        {{ department.departmentName }}
+      </option>}
+    </select>
+  
+    <!-- Terms Accepted Checkbox -->
+    <div class="flex items-center">
+      <input 
+        id="termsAccepted" 
+        type="checkbox" 
+        formControlName="termsAccepted" 
+      />
+      <label for="termsAccepted" class="ml-2 font-medium text-gray-600">I accept the terms and conditions</label>
+    </div>
+  
+    <!-- Update Button -->
     <button 
       class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors"
       (click)="updateUser(updatedUser.id)"
     >
       Update Details
     </button>
-    
   </div>
   
 }
+<lib-toastify-toast-container position='bottom-right' autoCloseSuccess="2000"/>
