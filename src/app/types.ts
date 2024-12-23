@@ -5,12 +5,13 @@ export interface User {
     email: string;         
     dob: Date;             
     imageUrl?: string;     
-    gender?: string;
+    gender?: number;
     address?: string;      
     phoneNumber?: string;  
     termsAccepted: boolean;
     departmentId: number ;
 }
+
 
 export interface AuthReq {
     email: string;
@@ -25,4 +26,11 @@ export interface AuthReq {
   export interface Department {
     id:number;
     departmentName:string;
+  }
+
+  export enum GenderEnum {
+    notselected=0,
+    Male = 1,
+    Female = 2,
+    Other = 3,
   }

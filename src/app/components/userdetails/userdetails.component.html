@@ -1,5 +1,6 @@
 @if( users && users.length > 0 && updatedUser == null){ 
      <h2 class="text-center text-3xl p-4 font-bold relative">User Details</h2>
+     <button class="p-2 border bg-orange-200 rounded-sm mx-5" (click)="downloadUserData()">download all data</button>
    <div class="grid grid-cols-3 p-4">
       @for(user of users;track user.id){
     
@@ -7,7 +8,7 @@
         <p><strong>Name:</strong> {{ user.name }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
         <p><strong>Date of Birth:</strong> {{ user.dob }}</p>
-        <p><strong>Gender:</strong> {{ user.gender }}</p>
+        <p><strong>Gender:</strong> {{user.gender && genderList[user.gender] ? genderList[user.gender] : 'N/A' }}</p>
         <p><strong>Phone Number:</strong> {{ user.phoneNumber }}</p>
         <p><strong>Address:</strong> {{ user.address }}</p>
         <p><strong>Department Name:</strong>  {{ getDepartmentName(user.departmentId) }}</p>
@@ -20,7 +21,7 @@
         <button (click)="edituserdetails(user.id)" class="px-3 py-1 border shadow-sm m-2 rounded-md bg-slate-400 text-white hover:shadow-lg hover:bg-slate-500">Edit</button>
         <button 
       class="px-3 py-1 border shadow-sm m-2 rounded-md bg-red-400 text-white hover:shadow-lg hover:bg-red-500"
-      (click)="DeleteUser(user.id)"
+      (click)="deleteUser(user.id)"
     >
       Delete user
     </button>
@@ -51,7 +52,11 @@
         class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
         formControlName="name"
         placeholder="Enter new name" 
+        (input)="onNameChange()"
       />
+      @if(updatedUserForm.get('name')?.invalid && updatedUserForm.get('name')?.touched){
+        <p class="text-sm text-red-500">name not valid</p>
+      }
     </div>
   
     <!-- Date of Birth Field -->
@@ -62,7 +67,12 @@
         type="date" 
         class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
         formControlName="dob"
-      />
+      /> @if(updatedUserForm.get('dob')?.invalid && updatedUserForm.get('dob')?.touched  ){
+
+        <p class="text-sm text-red-500">date of birth not valid</p>
+      }@if(futureDate()){
+        <p class="text-sm text-red-500">date of birth can't be in future</p>
+      }
     </div>
   
     <!-- Image URL Field -->
@@ -90,20 +100,19 @@
   
     <!-- Gender Field (Radio Button) -->
     <div class="flex flex-col">
-      <label for="gender" class="font-medium text-gray-600">Gender: </label>
-      <div class="flex items-center gap-4">
-        <label class="flex items-center">
-          <input type="radio" formControlName="gender" value="Male" />
-          <span class="ml-2">Male</span>
-        </label>
-        <label class="flex items-center">
-          <input type="radio" formControlName="gender" value="Female" />
-          <span class="ml-2">Female</span>
-        </label>
-        <label class="flex items-center">
-          <input type="radio" formControlName="gender" value="Other" />
-          <span class="ml-2">Other</span>
-        </label>
+      <label class="font-medium text-gray-600">Gender:</label>
+      <div class="flex gap-4">   
+      @for(gender of genderList; track $index) {
+    @if($index !=0){ 
+       <label class="flex items-center gap-1">
+      <input 
+            type="radio" 
+            formControlName="gender" 
+            [value]="$index"
+            class="mr-2" /> 
+          {{gender}}
+       </label> }
+      } 
       </div>
     </div>
   
@@ -129,6 +138,9 @@
         formControlName="phoneNumber"
         placeholder="Enter phone number" 
       />
+      @if(updatedUserForm.get('phoneNumber')?.invalid && updatedUserForm.get('phoneNumber')?.touched){
+        <p class="text-sm text-red-500">Phone number not valid</p>
+      }
     </div>
 
     <label class="font-medium text-gray-600">department:{{ getDepartmentName(updatedUser.departmentId) }}</label>

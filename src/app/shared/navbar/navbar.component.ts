@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../../../services/auth.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { ToastService, AngularToastifyModule } from 'angular-toastify';
 import { HttpClient, HttpClientModule } from '@angular/common/http';

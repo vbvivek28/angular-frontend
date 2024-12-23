@@ -7,3 +7,11 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+.fulfilled {
+    color: green;
+  }
+  
+  .missing {
+    color: red;
+  }

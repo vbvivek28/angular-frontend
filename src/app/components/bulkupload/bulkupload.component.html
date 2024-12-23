@@ -1,0 +1,12 @@
+<div class="w-[50vw] flex flex-col items-center justify-center mx-auto px-10 my-10" >
+  <label class="p-3 rounded-sm" for="bulkfile">Upload Excel File</label>
+  <input name="file"
+         accept=".xlsx,.csv"
+         class="p-4 rounded-sm border border-gray-300 mb-4"
+         type="file" id="bulkfile"
+         (change)="onFileChange($event)">
+  <button class="p-3 rounded-sm bg-slate-400 text-white" 
+          (click)="bulkUpload()">
+    Upload
+  </button>
+</div>
