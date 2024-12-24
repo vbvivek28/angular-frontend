@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AngularToastifyModule, ToastService } from 'angular-toastify';
 import { Department , GenderEnum} from '../../types';
 import { RegisterService } from '../../../services/register.service';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, CommonModule,AngularToastifyModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
@@ -19,8 +18,7 @@ export class RegisterComponent implements OnInit {
  
   constructor(
     private registerService: RegisterService,
-    private router: Router,
-    private _toastService: ToastService
+    private router: Router
   ) {}
 
   RegisterForm = new FormGroup({
@@ -80,11 +78,11 @@ export class RegisterComponent implements OnInit {
       this.registerService.registerUser(usr).subscribe({
         next: (res) => {
           console.log(res);
-          this._toastService.success('User registered successfully');
+           Swal.fire('Registered','User registered successfully','success');
           this.router.navigate(['/login']);
         },
         error: (err) => {
-          this._toastService.error(err.error.message);
+          Swal.fire('Registration error',`${err.error.message}`,'error');
           console.error(err);
         }
       });

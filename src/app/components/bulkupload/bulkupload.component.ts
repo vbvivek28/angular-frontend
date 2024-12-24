@@ -3,11 +3,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import { Router } from '@angular/router';
 import saveAs from 'file-saver';
-import { AngularToastifyModule, ToastService } from 'angular-toastify';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-bulkupload',
-  imports: [ReactiveFormsModule,AngularToastifyModule], 
+  imports: [ReactiveFormsModule], 
   templateUrl: './bulkupload.component.html',
   styleUrls: []
 })
@@ -16,7 +16,7 @@ export class BulkuploadComponent {
   
     file:(File | null)=null;  
 
-  constructor(private _userService: UserService,private router:Router,private _toastService: ToastService) {}
+  constructor(private _userService: UserService,private router:Router) {}
 
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -53,7 +53,7 @@ export class BulkuploadComponent {
                   this.router.navigate(['/']);
                 },
                 error: () => {
-                  this._toastService.error('Failed to fetch user details');
+                  Swal.fire('error', 'Failed to fetch user details','error');
                 }
               });
              

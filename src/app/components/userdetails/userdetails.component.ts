@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AngularToastifyModule, ToastService } from 'angular-toastify';
 import { User, Department ,GenderEnum} from '../../types';
 import { UserService } from '../../../services/user.service';
 import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';
-
+// import * as XLSX from 'xlsx';
+import { DatePipe } from '@angular/common';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-userdetails',
   templateUrl: './userdetails.component.html',
   styleUrl: './userdetails.component.css',
-  imports: [ReactiveFormsModule, AngularToastifyModule],
+  imports: [ReactiveFormsModule],
 })
 export class UserDetailComponent implements OnInit {
   users!: User[];
@@ -37,8 +37,12 @@ export class UserDetailComponent implements OnInit {
   constructor(
     private userService: UserService,
     private router: Router,
-    private _toastService: ToastService
-  ) {}
+    private datePipe: DatePipe
+  ) {  }
+ 
+  formatDob(dob: Date): string {
+    return this.datePipe.transform(dob, 'dd/MM/yyyy') || 'Invalid date';
+  }
 
   onNameChange() {
     const currentValue = this.updatedUserForm.get('name')?.value;
@@ -69,7 +73,8 @@ export class UserDetailComponent implements OnInit {
       this.updatedUser = user;
       this.updatedUserForm.patchValue(user);
     } else {
-      this._toastService.warn(`User with ID ${id} not found`);
+      Swal.fire('Error!', `User with ID ${id} not found`, 'error');
+      
     }
   }
 
@@ -89,31 +94,46 @@ export class UserDetailComponent implements OnInit {
 
     this.userService.updateUser(id, user).subscribe({
       next: () => {
-        this._toastService.success('User updated successfully');
+        Swal.fire('Success', `User updated successfully`, 'success');
         this.updatedUser = null;
         this.getUsers();
       },
       error: (err) => {
         console.log(err);
-        this._toastService.error('Failed to update user');
+        Swal.fire('Error', `Failed to update user`, 'error');
       },
     });
   }
 
   deleteUser(id: number) {
 
-    const cnfdelete=prompt("Are you sure you want to delete?? Type 'yes' to delete user")
-    if(cnfdelete?.toLowerCase() === "yes") {
-    this.userService.deleteUser(id).subscribe({
-      next: () => {
-        this._toastService.success('User deleted successfully');
-        this.getUsers();
-      },
-      error: (err) => {
-        console.log(err);
-        this._toastService.error('Failed to delete user');
-      },
-    });}
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.deleteUser(id).subscribe({
+          next: () => {
+             Swal.fire('Deleted!', 'User has been deleted.', 'success');
+            this.getUsers();
+
+          },
+          error: (err) => {
+            console.log(err);
+            Swal.fire('Error!', 'User cant be deleted.', 'error');
+          },
+        });
+       
+      }
+    });
+
+   
+   
+  
   }
 
   ngOnInit(): void {
@@ -124,34 +144,38 @@ export class UserDetailComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
-        this._toastService.error('Failed to fetch departments');
+        Swal.fire('Error', `Failed to fetch departments`, 'error');
       },
     });
   }
 
   getUsers(): void {
-    const token = localStorage.getItem('token') ?? '';
-    this.userService.getUsers(token).subscribe({
+   
+    this.userService.getUsers().subscribe({
       next: (data) => {
         this.users = data;
       },
       error: () => {
-        this._toastService.error('Failed to fetch user details');
+        Swal.fire('Error', `Failed to fetch user details`, 'error');
       },
     });
   }
 
   downloadUserData() {
-    const token = localStorage.getItem('token') ?? '';
-    this.userService.getExcelFile(token).subscribe({
+    
+    this.userService.getExcelFile().subscribe({
       next: (response) => {
         const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         saveAs(blob, 'user_data.xlsx');
       },
       error: () => {
-        this._toastService.error('Failed to fetch user details');
+        Swal.fire('Error', `Failed to fetch user details`, 'error');
       }
     });
+  }
+
+  goBack(){
+    this.updatedUser=null;
   }
   
 

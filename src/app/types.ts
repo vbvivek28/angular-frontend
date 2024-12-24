@@ -21,6 +21,7 @@ export interface AuthReq {
  export interface AuthResponse {
     token: string;
     expiration: string;
+    refreshToken:string;
   }
 
   export interface Department {

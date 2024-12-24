@@ -3,6 +3,7 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet,NavbarComponent,CommonModule],

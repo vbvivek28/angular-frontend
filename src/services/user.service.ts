@@ -12,12 +12,8 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getUsers(token: string): Observable<User[]> {
-    return this.http.get<User[]>(this.baseUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.baseUrl);
   }
 
   getDepartments(): Observable<Department[]> {
@@ -32,12 +28,8 @@ export class UserService {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
 
-  getExcelFile(token: string) {
-    return this.http.get(`${this.baseUrl}/download-excel`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      responseType: 'blob'
+  getExcelFile() {
+    return this.http.get(`${this.baseUrl}/download-excel`, { responseType: 'blob'
     });
   }
 

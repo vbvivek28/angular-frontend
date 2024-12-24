@@ -1,22 +1,21 @@
-import { HttpClient} from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
-import { AngularToastifyModule, ToastService } from 'angular-toastify';
-import { AuthReq, AuthResponse } from '../../types';
+import { AuthReq } from '../../types';
+import Swal from 'sweetalert2';
 
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.css' ,
-  imports:[FormsModule,AngularToastifyModule,ReactiveFormsModule]
+  imports:[FormsModule,ReactiveFormsModule]
 })
 export class LoginComponent implements OnInit {
  
 
-  constructor(private authService:AuthService,private router:Router,private _toast:ToastService) {}
+  constructor(private authService:AuthService,private router:Router) {}
 
   ngOnInit(): void {
    
@@ -31,17 +30,20 @@ export class LoginComponent implements OnInit {
       const loginData: AuthReq = this.user.value as AuthReq;
     this.authService.loginUser(loginData).subscribe({
       next: (response) => {
-        this._toast.success('Login successful');
+        Swal.fire('Success','Logged in successfully','success');
        this.user.value.email=''
        this.user.value.password=''
-        this.authService.savetoken(response.token);
+        this.authService.saveAccessToken(response.token);
+        this.authService.saveRefreshToken(response.refreshToken);
         this.router.navigate(['/user-detail']);
       },
       error: (error) => {
         const errorMessage = error.error?.message || error.error;
-        this._toast.error(errorMessage);
+        Swal.fire('Error',`${errorMessage}`,'error');
+       
       }
     });
   }
 }
+
 }

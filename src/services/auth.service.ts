@@ -15,22 +15,40 @@ export class AuthService {
   constructor(private http:HttpClient) {}
 
   private readonly apiUrl = 'https://localhost:44342';
+  private refreshTokenKey = 'refreshToken';
   loginUser(data: AuthReq): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, data);
   }
   private checkLoginStatus(): boolean {
-    const token = localStorage.getItem('token');
+    const token = this.getAccessToken();
     return token !== null && token !== '';
   }
 
-  savetoken(token: string): void {
+  
+  saveAccessToken(token: string): void {
     localStorage.setItem('token', token);
     this.loggedInSubject.next(true); 
   }
 
-  logout(): void {
+  logout(refreshToken:string): Observable<any> {
     localStorage.removeItem('token');
+    //localStorage.removeItem(this.refreshTokenKey);
     this.loggedInSubject.next(false); 
+    return this.http.post<string>(`${this.apiUrl}/logout`,{"refreshToken":refreshToken});
+  }
+
+  saveRefreshToken(refreshToken: string): void {
+    localStorage.setItem(this.refreshTokenKey, refreshToken);
   }
  
+  getRefreshToken(): string | null {
+    return localStorage.getItem(this.refreshTokenKey);
+  }
+  getAccessToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  refreshToken(refreshToken: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/refresh-token`, { "refreshtoken": refreshToken });
+  }
 }

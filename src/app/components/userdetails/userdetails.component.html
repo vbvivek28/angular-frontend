@@ -7,7 +7,7 @@
       <div class="border shadow-lg m-3 p-8">
         <p><strong>Name:</strong> {{ user.name }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Date of Birth:</strong> {{ user.dob }}</p>
+        <p><strong>Date of Birth:</strong> {{formatDob(user.dob) }}</p>
         <p><strong>Gender:</strong> {{user.gender && genderList[user.gender] ? genderList[user.gender] : 'N/A' }}</p>
         <p><strong>Phone Number:</strong> {{ user.phoneNumber }}</p>
         <p><strong>Address:</strong> {{ user.address }}</p>
@@ -35,8 +35,10 @@
   }
   
 @if(updatedUser!=null){
+ 
   <div class="w-[80%] sm:w-[50%] mx-auto bg-white shadow-lg p-6 rounded-lg flex flex-col gap-6" [formGroup]="updatedUserForm">
-    <h2 class="text-2xl font-bold text-center text-gray-700">Edit User Details</h2>
+     <button class="px-2 py-1 rounded-md shadow-md justify-start w-[80px] bg-slate-500 hover:bg-slate-700 text-white" (click)="goBack()">Go back</button>
+     <h2 class="text-2xl font-bold text-center text-gray-700">Edit User Details</h2>
     
     <!-- Email Field -->
     <div class="flex flex-col">
@@ -61,7 +63,7 @@
   
     <!-- Date of Birth Field -->
     <div class="flex flex-col">
-      <label for="dob" class="font-medium text-gray-600">Date of Birth: {{updatedUser.dob}}</label>
+      <label for="dob" class="font-medium text-gray-600">Date of Birth: {{formatDob(updatedUser.dob)}}</label>
       <input 
         id="dob" 
         type="date" 
@@ -172,4 +174,3 @@
   </div>
   
 }
-<lib-toastify-toast-container position='bottom-right' autoCloseSuccess="2000"/>
